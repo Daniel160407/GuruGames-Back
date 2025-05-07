@@ -1,9 +1,6 @@
 package com.gameroom.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,19 +16,28 @@ public class JwtUtils {
     public String JWT_PREFIX = "Bearer ";
     private final long expiration = 7 * 24 * 60 * 60 * 1000;
 
-    public String generateToken(String email) {
+    public String generateToken(String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(SignatureAlgorithm.HS256, secret.getBytes())
                 .compact();
     }
 
     public String extractUsername(String token) {
         try {
             return getClaims(token).getSubject();
-        } catch (ExpiredJwtException ignored) {
+        } catch (ExpiredJwtException e) {
+            return null;
+        }
+    }
+
+    public String extractRole(String token) {
+        try {
+            return getClaims(token).get("role", String.class);
+        } catch (ExpiredJwtException e) {
             return null;
         }
     }
@@ -40,31 +46,14 @@ public class JwtUtils {
         try {
             getClaims(token);
             return true;
-        } catch (ExpiredJwtException e) {
+        } catch (JwtException e) {
             return false;
         }
     }
 
     private Claims getClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    private Key getSignInKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
-    }
-
-    public Date extractExpiration(String token) {
-        return extractAllClaims(token).getExpiration();
-    }
-
-    private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
+                .setSigningKey(secret.getBytes())
                 .parseClaimsJws(token)
                 .getBody();
     }

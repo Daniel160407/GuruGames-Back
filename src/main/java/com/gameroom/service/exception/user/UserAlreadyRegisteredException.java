@@ -1,4 +1,4 @@
-package com.gameroom.service.exception;
+package com.gameroom.service.exception.user;
 
 public class UserAlreadyRegisteredException extends RuntimeException {
     public UserAlreadyRegisteredException(String message) {

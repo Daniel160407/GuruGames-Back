@@ -3,8 +3,8 @@ package com.gameroom.service;
 import com.gameroom.dto.UserDto;
 import com.gameroom.model.User;
 import com.gameroom.repository.UsersRepository;
-import com.gameroom.service.exception.UserAlreadyRegisteredException;
-import com.gameroom.service.exception.UserNotRegisteredException;
+import com.gameroom.service.exception.user.UserAlreadyRegisteredException;
+import com.gameroom.service.exception.user.UserNotRegisteredException;
 import com.gameroom.util.ModelConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void login(UserDto userDto) {
         Optional<User> user = usersRepository.findByEmail(userDto.getEmail());
+        //TODO: Password validating
         if (user.isPresent() && user.get().getEmail().equals(userDto.getEmail()) &&
                 passwordEncoder.matches(userDto.getPassword(), user.get().getPassword())) {
         } else {

@@ -2,8 +2,8 @@ package com.gameroom.controller;
 
 import com.gameroom.dto.UserDto;
 import com.gameroom.service.UserService;
-import com.gameroom.service.exception.UserAlreadyRegisteredException;
-import com.gameroom.service.exception.UserNotRegisteredException;
+import com.gameroom.service.exception.user.UserAlreadyRegisteredException;
+import com.gameroom.service.exception.user.UserNotRegisteredException;
 import com.gameroom.util.JwtUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.val;
@@ -30,8 +30,10 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody UserDto userDto, HttpServletResponse response) {
         try {
             userService.login(userDto);
-            val token = jwtUtils.generateToken(userDto.getEmail());
+
+            val token = jwtUtils.generateToken(userDto.getEmail(), "USER");
             response.addHeader(jwtUtils.JWT_HEADER, jwtUtils.JWT_PREFIX + token);
+
             return ResponseEntity.accepted().build();
         } catch (UserNotRegisteredException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
