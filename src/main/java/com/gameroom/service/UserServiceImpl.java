@@ -28,7 +28,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void login(UserDto userDto) {
         Optional<User> user = usersRepository.findByEmail(userDto.getEmail());
-        if (user.isEmpty()) {
+        if (user.isPresent() && user.get().getEmail().equals(userDto.getEmail()) &&
+                passwordEncoder.matches(userDto.getPassword(), user.get().getPassword())) {
+        } else {
             throw new UserNotRegisteredException("User is not registered!");
         }
     }

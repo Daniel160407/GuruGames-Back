@@ -9,7 +9,7 @@ public class ModelConverter {
     public User convert(UserDto userDto) {
         return User.builder()
                 .email(userDto.getEmail())
-                .password(userDto.getEmail())
+                .password(userDto.getPassword())
                 .build();
     }
 }

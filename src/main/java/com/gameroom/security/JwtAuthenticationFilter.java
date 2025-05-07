@@ -1,6 +1,6 @@
 package com.gameroom.security;
 
-import com.wordsteacher2.util.JwtUtils;
+import com.gameroom.util.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

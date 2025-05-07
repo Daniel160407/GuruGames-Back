@@ -1,6 +1,6 @@
 package com.gameroom.security;
 
-import com.wordsteacher2.util.JwtUtils;
+import com.gameroom.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,10 +33,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/", "/*.html", "/assets/*.css", "/assets/*.js", "/fonts/*.ttf",  "/images/*.png", "/sounds/*.mp3", "/svg/*.svg").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/documentation").permitAll()
-                        .requestMatchers("/crossword").permitAll()
-                        .requestMatchers("/wordsTeacher/crossword").permitAll()
+                        .requestMatchers("/gameroom/user").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
