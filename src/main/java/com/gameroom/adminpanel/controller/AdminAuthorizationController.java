@@ -35,7 +35,7 @@ public class AdminAuthorizationController {
 
             return ResponseEntity.accepted().build();
         } catch (InvalidEmailOrPasswordException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 }

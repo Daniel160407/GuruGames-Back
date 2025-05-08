@@ -36,9 +36,12 @@ public class UserController {
 
             return ResponseEntity.accepted().build();
         } catch (UserNotRegisteredException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 
     @PostMapping
     public ResponseEntity<?> register(@RequestBody UserDto userDto) {
@@ -46,7 +49,7 @@ public class UserController {
             userService.register(userDto);
             return ResponseEntity.accepted().build();
         } catch (UserAlreadyRegisteredException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
 }

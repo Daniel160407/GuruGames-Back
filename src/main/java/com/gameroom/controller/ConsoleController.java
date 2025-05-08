@@ -41,9 +41,9 @@ public class ConsoleController {
             consoleService.bookConsole(consoleid, userid);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (ConsoleIsBusyException e) {
-            return ResponseEntity.status(HttpStatus.LOCKED).build();
+            return ResponseEntity.status(HttpStatus.LOCKED).body(e.getMessage());
         } catch (NoSuchConsoleException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

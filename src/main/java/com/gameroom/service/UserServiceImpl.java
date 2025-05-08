@@ -3,6 +3,7 @@ package com.gameroom.service;
 import com.gameroom.dto.UserDto;
 import com.gameroom.model.User;
 import com.gameroom.repository.UsersRepository;
+import com.gameroom.service.exception.adminpanel.InvalidEmailOrPasswordException;
 import com.gameroom.service.exception.user.UserAlreadyRegisteredException;
 import com.gameroom.service.exception.user.UserNotRegisteredException;
 import com.gameroom.util.ModelConverter;
@@ -27,14 +28,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void login(UserDto userDto) {
+        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+=-]).{8,}$";
+
+        if (!userDto.getPassword().matches(regex)) {
+            throw new IllegalArgumentException(
+                    "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character (!@#$%^&*()_+=-)."
+            );
+        }
+
         Optional<User> user = usersRepository.findByEmail(userDto.getEmail());
-        //TODO: Password validating
-        if (user.isPresent() && user.get().getEmail().equals(userDto.getEmail()) &&
-                passwordEncoder.matches(userDto.getPassword(), user.get().getPassword())) {
+        if (user.isPresent()) {
+            if (user.get().getEmail().equals(userDto.getEmail()) &&
+                    passwordEncoder.matches(userDto.getPassword(), user.get().getPassword())) {
+            } else {
+                throw new InvalidEmailOrPasswordException("Invalid email or password!");
+            }
         } else {
             throw new UserNotRegisteredException("User is not registered!");
         }
     }
+
 
     @Override
     public void register(UserDto userDto) {
