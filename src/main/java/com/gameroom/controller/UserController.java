@@ -1,7 +1,9 @@
 package com.gameroom.controller;
 
 import com.gameroom.dto.UserDto;
+import com.gameroom.model.CreditCard;
 import com.gameroom.service.UserService;
+import com.gameroom.service.exception.user.MissingRequiredDataException;
 import com.gameroom.service.exception.user.UserAlreadyRegisteredException;
 import com.gameroom.service.exception.user.UserNotRegisteredException;
 import com.gameroom.util.JwtUtils;
@@ -29,12 +31,12 @@ public class UserController {
     @PutMapping
     public ResponseEntity<?> login(@RequestBody UserDto userDto, HttpServletResponse response) {
         try {
-            userService.login(userDto);
+            CreditCard creditCard = userService.login(userDto);
 
-            val token = jwtUtils.generateToken(userDto.getEmail(), "USER");
+            val token = jwtUtils.generateToken(userDto.getPhoneNumber(), "USER");
             response.addHeader(jwtUtils.JWT_HEADER, jwtUtils.JWT_PREFIX + token);
 
-            return ResponseEntity.accepted().build();
+            return ResponseEntity.accepted().body(creditCard);
         } catch (UserNotRegisteredException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (IllegalArgumentException e) {
@@ -48,7 +50,7 @@ public class UserController {
         try {
             userService.register(userDto);
             return ResponseEntity.accepted().build();
-        } catch (UserAlreadyRegisteredException e) {
+        } catch (UserAlreadyRegisteredException | MissingRequiredDataException | IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }

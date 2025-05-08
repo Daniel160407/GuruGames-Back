@@ -1,5 +1,6 @@
 package com.gameroom.adminpanel.controller;
 
+import com.gameroom.adminpanel.model.Admin;
 import com.gameroom.adminpanel.service.AdminAuthorizationService;
 import com.gameroom.dto.UserDto;
 import com.gameroom.service.exception.adminpanel.InvalidEmailOrPasswordException;
@@ -25,11 +26,11 @@ public class AdminAuthorizationController {
     }
 
     @PutMapping
-    public ResponseEntity<?> login(@RequestBody UserDto userDto, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody Admin admin, HttpServletResponse response) {
         try {
-            adminAuthorizationService.login(userDto);
+            adminAuthorizationService.login(admin);
 
-            String token = jwtUtils.generateToken(userDto.getEmail(), "ADMIN");
+            String token = jwtUtils.generateToken(admin.getEmail(), "ADMIN");
 
             response.addHeader(jwtUtils.JWT_HEADER, jwtUtils.JWT_PREFIX + token);
 

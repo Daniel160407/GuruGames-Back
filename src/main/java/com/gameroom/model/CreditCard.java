@@ -1,4 +1,4 @@
-package com.gameroom.dto;
+package com.gameroom.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,13 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
-    private String name;
-    private String lastname;
-    private String email;
-    private String phoneNumber;
-    private String password;
-    private String cardNumber;
+public class CreditCard {
+    private String number;
     private String expiry;
     private String securityCode;
 }

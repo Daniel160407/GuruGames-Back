@@ -13,8 +13,14 @@ import java.util.List;
 public class ModelConverter {
     public User convert(UserDto userDto) {
         return User.builder()
+                .name(userDto.getName())
+                .lastname(userDto.getLastname())
                 .email(userDto.getEmail())
+                .phoneNumber(userDto.getPhoneNumber())
                 .password(userDto.getPassword())
+                .cardNumber(userDto.getCardNumber())
+                .expiry(userDto.getExpiry())
+                .securityCode(userDto.getSecurityCode())
                 .build();
     }
 

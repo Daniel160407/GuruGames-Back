@@ -1,9 +1,11 @@
 package com.gameroom.service;
 
 import com.gameroom.dto.UserDto;
+import com.gameroom.model.CreditCard;
 import com.gameroom.model.User;
 import com.gameroom.repository.UsersRepository;
 import com.gameroom.service.exception.adminpanel.InvalidEmailOrPasswordException;
+import com.gameroom.service.exception.user.MissingRequiredDataException;
 import com.gameroom.service.exception.user.UserAlreadyRegisteredException;
 import com.gameroom.service.exception.user.UserNotRegisteredException;
 import com.gameroom.util.ModelConverter;
@@ -27,7 +29,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void login(UserDto userDto) {
+    public CreditCard login(UserDto userDto) {
         String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+=-]).{8,}$";
 
         if (!userDto.getPassword().matches(regex)) {
@@ -36,10 +38,18 @@ public class UserServiceImpl implements UserService {
             );
         }
 
-        Optional<User> user = usersRepository.findByEmail(userDto.getEmail());
-        if (user.isPresent()) {
-            if (user.get().getEmail().equals(userDto.getEmail()) &&
-                    passwordEncoder.matches(userDto.getPassword(), user.get().getPassword())) {
+        Optional<User> userOptional = usersRepository.findByPhoneNumber(userDto.getPhoneNumber());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (user.getName().equals(userDto.getName()) &&
+                    user.getLastname().equals(userDto.getLastname()) &&
+                    passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
+
+                return CreditCard.builder()
+                        .number(user.getCardNumber())
+                        .expiry(user.getExpiry())
+                        .securityCode(user.getSecurityCode())
+                        .build();
             } else {
                 throw new InvalidEmailOrPasswordException("Invalid email or password!");
             }
@@ -51,12 +61,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void register(UserDto userDto) {
-        Optional<User> user = usersRepository.findByEmail(userDto.getEmail());
+        Optional<User> user;
+        if (userDto.getPhoneNumber() != null && !userDto.getPhoneNumber().equals("")) {
+            user = usersRepository.findByPhoneNumber(userDto.getPhoneNumber());
+        } else if (userDto.getEmail() != null) {
+            String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+            if (!userDto.getEmail().matches(emailRegex)) {
+                throw new IllegalArgumentException("Invalid email format!");
+            }
+
+            user = usersRepository.findByEmail(userDto.getEmail());
+        } else {
+            throw new MissingRequiredDataException("You must enter email or phone number!");
+        }
+
         if (user.isEmpty()) {
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
             usersRepository.save(modelConverter.convert(userDto));
         } else {
-            throw new UserAlreadyRegisteredException("User with same Email address is already registered!");
+            throw new UserAlreadyRegisteredException("User with same Email address or Phone number is already registered!");
         }
     }
+
 }

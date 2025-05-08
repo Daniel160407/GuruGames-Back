@@ -1,5 +1,6 @@
 package com.gameroom.adminpanel.service;
 
+import com.gameroom.adminpanel.model.Admin;
 import com.gameroom.dto.UserDto;
 import com.gameroom.service.exception.adminpanel.InvalidEmailOrPasswordException;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +14,8 @@ public class AdminAuthorizationServiceImpl implements AdminAuthorizationService 
     private String adminPassword;
 
     @Override
-    public void login(UserDto userDto) {
-        if (!(userDto.getEmail().equals(adminEmail) && userDto.getPassword().equals(adminPassword))) {
+    public void login(Admin admin) {
+        if (!(admin.getEmail().equals(adminEmail) && admin.getPassword().equals(adminPassword))) {
             throw new InvalidEmailOrPasswordException("Invalid email or password!");
         }
     }
