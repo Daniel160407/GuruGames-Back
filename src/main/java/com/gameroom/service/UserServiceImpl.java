@@ -5,6 +5,7 @@ import com.gameroom.model.CreditCard;
 import com.gameroom.model.User;
 import com.gameroom.repository.UsersRepository;
 import com.gameroom.service.exception.adminpanel.InvalidEmailOrPasswordException;
+import com.gameroom.service.exception.user.InvalidCredentialsException;
 import com.gameroom.service.exception.user.MissingRequiredDataException;
 import com.gameroom.service.exception.user.UserAlreadyRegisteredException;
 import com.gameroom.service.exception.user.UserNotRegisteredException;
@@ -38,12 +39,10 @@ public class UserServiceImpl implements UserService {
             );
         }
 
-        Optional<User> userOptional = usersRepository.findByPhoneNumber(userDto.getPhoneNumber());
+        Optional<User> userOptional = usersRepository.findByNameAndLastname(userDto.getName(), userDto.getLastname());
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            if (user.getName().equals(userDto.getName()) &&
-                    user.getLastname().equals(userDto.getLastname()) &&
-                    passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
+            if (passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
 
                 return CreditCard.builder()
                         .number(user.getCardNumber())
@@ -51,7 +50,7 @@ public class UserServiceImpl implements UserService {
                         .securityCode(user.getSecurityCode())
                         .build();
             } else {
-                throw new InvalidEmailOrPasswordException("Invalid email or password!");
+                throw new InvalidCredentialsException("Invalid password!");
             }
         } else {
             throw new UserNotRegisteredException("User is not registered!");
