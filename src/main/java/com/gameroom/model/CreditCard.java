@@ -13,4 +13,5 @@ public class CreditCard {
     private String number;
     private String expiry;
     private String securityCode;
+    private Integer userId;
 }

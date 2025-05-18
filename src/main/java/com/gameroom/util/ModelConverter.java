@@ -1,8 +1,10 @@
 package com.gameroom.util;
 
 import com.gameroom.dto.ConsoleDto;
+import com.gameroom.dto.LocationDto;
 import com.gameroom.dto.UserDto;
 import com.gameroom.model.Console;
+import com.gameroom.model.Location;
 import com.gameroom.model.User;
 import org.springframework.stereotype.Component;
 
@@ -44,6 +46,18 @@ public class ModelConverter {
                 .build();
     }
 
+    public Location convert(LocationDto locationDto) {
+        return Location.builder()
+                .name(locationDto.getName())
+                .address(locationDto.getAddress())
+                .phone(locationDto.getPhone())
+                .hours(locationDto.getHours())
+                .features(locationDto.getFeatures())
+                .lat(locationDto.getLat())
+                .lng(locationDto.getLng())
+                .build();
+    }
+
     public List<ConsoleDto> convertConsolesToDtoList(List<Console> consoles) {
         List<ConsoleDto> consoleDtos = new ArrayList<>();
         consoles.forEach(console -> consoleDtos.add(new ConsoleDto(
@@ -54,5 +68,19 @@ public class ModelConverter {
                 console.getUserId()
         )));
         return consoleDtos;
+    }
+
+    public List<LocationDto> convertLocationsToDtoList(List<Location> locations) {
+        List<LocationDto> locationDtos = new ArrayList<>();
+        locations.forEach(location -> locationDtos.add(new LocationDto(
+                location.getName(),
+                location.getAddress(),
+                location.getPhone(),
+                location.getHours(),
+                location.getFeatures(),
+                location.getLat(),
+                location.getLng()
+        )));
+        return locationDtos;
     }
 }

@@ -18,4 +18,10 @@ public class UserDto {
     private String cardNumber;
     private String expiry;
     private String securityCode;
+
+    public UserDto(String email, String phoneNumber, String password) {
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+    }
 }

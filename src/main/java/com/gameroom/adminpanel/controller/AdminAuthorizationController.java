@@ -6,11 +6,14 @@ import com.gameroom.dto.UserDto;
 import com.gameroom.service.exception.adminpanel.InvalidEmailOrPasswordException;
 import com.gameroom.util.JwtUtils;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/adminpanel/authorization")
@@ -30,7 +33,7 @@ public class AdminAuthorizationController {
         try {
             adminAuthorizationService.login(admin);
 
-            String token = jwtUtils.generateToken(admin.getEmail(), "ADMIN");
+            val token = jwtUtils.generateToken(admin.getEmail());
 
             response.addHeader(jwtUtils.JWT_HEADER, jwtUtils.JWT_PREFIX + token);
 

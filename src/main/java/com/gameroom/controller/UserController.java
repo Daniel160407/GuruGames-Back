@@ -33,7 +33,7 @@ public class UserController {
         try {
             CreditCard creditCard = userService.login(userDto);
 
-            val token = jwtUtils.generateToken(userDto.getPhoneNumber(), "USER");
+            val token = jwtUtils.generateToken(userDto.getPhoneNumber());
             response.addHeader(jwtUtils.JWT_HEADER, jwtUtils.JWT_PREFIX + token);
 
             return ResponseEntity.accepted().body(creditCard);

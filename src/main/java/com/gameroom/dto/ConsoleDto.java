@@ -22,4 +22,10 @@ public class ConsoleDto {
         this.state = state;
         this.userId = userId;
     }
+
+    public ConsoleDto(String name, String description, Integer state) {
+        this.name = name;
+        this.description = description;
+        this.state = state;
+    }
 }

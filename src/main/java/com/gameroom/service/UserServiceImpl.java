@@ -4,7 +4,6 @@ import com.gameroom.dto.UserDto;
 import com.gameroom.model.CreditCard;
 import com.gameroom.model.User;
 import com.gameroom.repository.UsersRepository;
-import com.gameroom.service.exception.adminpanel.InvalidEmailOrPasswordException;
 import com.gameroom.service.exception.user.InvalidCredentialsException;
 import com.gameroom.service.exception.user.MissingRequiredDataException;
 import com.gameroom.service.exception.user.UserAlreadyRegisteredException;
@@ -31,15 +30,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CreditCard login(UserDto userDto) {
-        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+=-]).{8,}$";
-
-        if (!userDto.getPassword().matches(regex)) {
-            throw new IllegalArgumentException(
-                    "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character (!@#$%^&*()_+=-)."
-            );
+        Optional<User> userOptional = usersRepository.findByEmail(userDto.getEmail());
+        if (userOptional.isEmpty()) {
+            userOptional = usersRepository.findByPhoneNumber(userDto.getPhoneNumber());
         }
-
-        Optional<User> userOptional = usersRepository.findByNameAndLastname(userDto.getName(), userDto.getLastname());
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
@@ -48,6 +42,7 @@ public class UserServiceImpl implements UserService {
                         .number(user.getCardNumber())
                         .expiry(user.getExpiry())
                         .securityCode(user.getSecurityCode())
+                        .userId(user.getId())
                         .build();
             } else {
                 throw new InvalidCredentialsException("Invalid password!");
@@ -60,6 +55,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void register(UserDto userDto) {
+        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+=-]).{8,}$";
+        if (!userDto.getPassword().matches(regex)) {
+            throw new IllegalArgumentException(
+                    "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character (!@#$%^&*()_+=-)."
+            );
+        }
+
         Optional<User> user;
         if (userDto.getPhoneNumber() != null && !userDto.getPhoneNumber().equals("")) {
             user = usersRepository.findByPhoneNumber(userDto.getPhoneNumber());
@@ -81,5 +83,4 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyRegisteredException("User with same Email address or Phone number is already registered!");
         }
     }
-
 }
