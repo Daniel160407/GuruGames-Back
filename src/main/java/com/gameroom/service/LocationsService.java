@@ -1,6 +1,7 @@
 package com.gameroom.service;
 
 import com.gameroom.dto.LocationDto;
+import com.gameroom.model.Location;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,5 +10,5 @@ import java.util.List;
 public interface LocationsService {
     List<LocationDto> addLocation(LocationDto locationDto);
 
-    List<LocationDto> getLocations();
+    List<Location> getLocations();
 }

@@ -61,6 +61,7 @@ public class ModelConverter {
         return UserConsole.builder()
                 .userId(userConsoleDto.getUserId())
                 .consoleId(userConsoleDto.getConsoleId())
+                .locationId(userConsoleDto.getLocationId())
                 .bookingDate(userConsoleDto.getBookingDate())
                 .bookingTime(userConsoleDto.getBookingTime())
                 .duration(userConsoleDto.getDuration())

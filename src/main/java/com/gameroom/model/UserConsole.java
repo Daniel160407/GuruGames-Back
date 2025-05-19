@@ -24,6 +24,8 @@ public class UserConsole {
     private Integer userId;
     @Column(name = "console_id")
     private Integer consoleId;
+    @Column(name = "location_id")
+    private Integer locationId;
     @Column(name = "booking_date")
     private String bookingDate;
     @Column(name = "booking_time")

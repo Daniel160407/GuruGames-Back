@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class UserConsoleDto {
     private Integer userId;
     private Integer consoleId;
+    private Integer locationId;
     private String bookingDate;
     private String bookingTime;
     private Integer duration;

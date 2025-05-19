@@ -50,7 +50,7 @@ public class ConsoleServiceImpl implements ConsoleService {
                     LocalDateTime bookingDateTime = LocalDateTime.of(date, time);
 
                     int duration = userConsole.getDuration();
-                    LocalDateTime expirationDateTime = bookingDateTime.plusMinutes(duration);
+                    LocalDateTime expirationDateTime = bookingDateTime.plusHours(duration);
 
                     if (expirationDateTime.isBefore(LocalDateTime.now())) {
                         Optional<Console> optionalConsole = consoleRepository.findById(userConsole.getConsoleId());

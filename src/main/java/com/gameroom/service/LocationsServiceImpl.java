@@ -1,6 +1,7 @@
 package com.gameroom.service;
 
 import com.gameroom.dto.LocationDto;
+import com.gameroom.model.Location;
 import com.gameroom.repository.LocationsRepository;
 import com.gameroom.util.ModelConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class LocationsServiceImpl implements LocationsService {
     }
 
     @Override
-    public List<LocationDto> getLocations() {
-        return modelConverter.convertLocationsToDtoList(locationsRepository.findAll());
+    public List<Location> getLocations() {
+        return locationsRepository.findAll();
     }
 }
