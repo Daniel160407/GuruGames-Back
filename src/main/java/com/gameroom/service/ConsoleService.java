@@ -1,6 +1,7 @@
 package com.gameroom.service;
 
 import com.gameroom.dto.ConsoleDto;
+import com.gameroom.dto.UserConsoleDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,5 +14,5 @@ public interface ConsoleService {
 
     List<ConsoleDto> getUserConsoles(Integer userId);
 
-    void bookConsole(Integer id, Integer userId);
+    void bookConsole(UserConsoleDto userConsoleDto);
 }

@@ -2,10 +2,12 @@ package com.gameroom.util;
 
 import com.gameroom.dto.ConsoleDto;
 import com.gameroom.dto.LocationDto;
+import com.gameroom.dto.UserConsoleDto;
 import com.gameroom.dto.UserDto;
 import com.gameroom.model.Console;
 import com.gameroom.model.Location;
 import com.gameroom.model.User;
+import com.gameroom.model.UserConsole;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,9 +22,6 @@ public class ModelConverter {
                 .email(userDto.getEmail())
                 .phoneNumber(userDto.getPhoneNumber())
                 .password(userDto.getPassword())
-                .cardNumber(userDto.getCardNumber())
-                .expiry(userDto.getExpiry())
-                .securityCode(userDto.getSecurityCode())
                 .build();
     }
 
@@ -55,6 +54,17 @@ public class ModelConverter {
                 .features(locationDto.getFeatures())
                 .lat(locationDto.getLat())
                 .lng(locationDto.getLng())
+                .build();
+    }
+
+    public UserConsole convert(UserConsoleDto userConsoleDto) {
+        return UserConsole.builder()
+                .userId(userConsoleDto.getUserId())
+                .consoleId(userConsoleDto.getConsoleId())
+                .bookingDate(userConsoleDto.getBookingDate())
+                .bookingTime(userConsoleDto.getBookingTime())
+                .duration(userConsoleDto.getDuration())
+                .guestsNum(userConsoleDto.getGuestsNum())
                 .build();
     }
 

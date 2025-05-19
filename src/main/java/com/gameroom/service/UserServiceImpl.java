@@ -1,7 +1,6 @@
 package com.gameroom.service;
 
 import com.gameroom.dto.UserDto;
-import com.gameroom.model.CreditCard;
 import com.gameroom.model.User;
 import com.gameroom.repository.UsersRepository;
 import com.gameroom.service.exception.user.InvalidCredentialsException;
@@ -29,7 +28,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CreditCard login(UserDto userDto) {
+    public Integer login(UserDto userDto) {
         Optional<User> userOptional = usersRepository.findByEmail(userDto.getEmail());
         if (userOptional.isEmpty()) {
             userOptional = usersRepository.findByPhoneNumber(userDto.getPhoneNumber());
@@ -38,12 +37,7 @@ public class UserServiceImpl implements UserService {
             User user = userOptional.get();
             if (passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
 
-                return CreditCard.builder()
-                        .number(user.getCardNumber())
-                        .expiry(user.getExpiry())
-                        .securityCode(user.getSecurityCode())
-                        .userId(user.getId())
-                        .build();
+                return user.getId();
             } else {
                 throw new InvalidCredentialsException("Invalid password!");
             }

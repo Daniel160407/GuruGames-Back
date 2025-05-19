@@ -1,7 +1,6 @@
 package com.gameroom.controller;
 
 import com.gameroom.dto.UserDto;
-import com.gameroom.model.CreditCard;
 import com.gameroom.service.UserService;
 import com.gameroom.service.exception.user.MissingRequiredDataException;
 import com.gameroom.service.exception.user.UserAlreadyRegisteredException;
@@ -31,12 +30,12 @@ public class UserController {
     @PutMapping
     public ResponseEntity<?> login(@RequestBody UserDto userDto, HttpServletResponse response) {
         try {
-            CreditCard creditCard = userService.login(userDto);
+            Integer userId = userService.login(userDto);
 
             val token = jwtUtils.generateToken(userDto.getPhoneNumber());
             response.addHeader(jwtUtils.JWT_HEADER, jwtUtils.JWT_PREFIX + token);
 
-            return ResponseEntity.accepted().body(creditCard);
+            return ResponseEntity.accepted().body(userId);
         } catch (UserNotRegisteredException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (IllegalArgumentException e) {

@@ -15,9 +15,6 @@ public class UserDto {
     private String email;
     private String phoneNumber;
     private String password;
-    private String cardNumber;
-    private String expiry;
-    private String securityCode;
 
     public UserDto(String email, String phoneNumber, String password) {
         this.email = email;

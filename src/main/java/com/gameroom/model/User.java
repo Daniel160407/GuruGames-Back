@@ -27,10 +27,4 @@ public class User {
     private String phoneNumber;
     @Column(name = "password")
     private String password;
-    @Column(name = "card_number")
-    private String cardNumber;
-    @Column(name = "expiry")
-    private String expiry;
-    @Column(name = "security_code")
-    private String securityCode;
 }

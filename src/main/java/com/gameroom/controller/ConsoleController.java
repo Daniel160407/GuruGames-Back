@@ -1,5 +1,6 @@
 package com.gameroom.controller;
 
+import com.gameroom.dto.UserConsoleDto;
 import com.gameroom.service.ConsoleService;
 import com.gameroom.service.exception.console.ConsoleIsBusyException;
 import com.gameroom.service.exception.console.NoSuchConsoleException;
@@ -36,9 +37,9 @@ public class ConsoleController {
     }
 
     @PutMapping
-    public ResponseEntity<?> bookConsole(@RequestParam Integer consoleid, @RequestParam Integer userid) {
+    public ResponseEntity<?> bookConsole(@RequestBody UserConsoleDto userConsoleDto) {
         try {
-            consoleService.bookConsole(consoleid, userid);
+            consoleService.bookConsole(userConsoleDto);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (ConsoleIsBusyException e) {
             return ResponseEntity.status(HttpStatus.LOCKED).body(e.getMessage());
