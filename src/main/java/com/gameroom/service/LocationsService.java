@@ -11,4 +11,6 @@ public interface LocationsService {
     List<LocationDto> addLocation(LocationDto locationDto);
 
     List<Location> getLocations();
+    List<Location>editLocation(Location location);
+    List<Location>deleteLocation(Integer id);
 }
