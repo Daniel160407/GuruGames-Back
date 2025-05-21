@@ -77,15 +77,19 @@ public class ModelConverter {
 
     public Message convert(MessageDto messageDto) {
         return Message.builder()
+                .id(messageDto.getId())
                 .name(messageDto.getName())
                 .email(messageDto.getEmail())
                 .message(messageDto.getMessage())
+                .date(messageDto.getDate())
                 .build();
     }
 
     public List<MessageDto> convertMessagesToDtoList(List<Message> messages) {
         List<MessageDto> messageDtos = new ArrayList<>();
-        messages.forEach(message -> messageDtos.add(new MessageDto(message.getName(), message.getEmail(), message.getMessage())));
+        messages.forEach(message -> messageDtos.add(
+                new MessageDto(message.getId(), message.getName(), message.getEmail(), message.getMessage(), message.getDate())
+        ));
         return messageDtos;
     }
 

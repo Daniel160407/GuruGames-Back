@@ -23,4 +23,6 @@ public class Message {
     private String email;
     @Column(name = "message")
     private String message;
+    @Column(name = "date")
+    private String date;
 }

@@ -8,4 +8,5 @@ import java.util.List;
 @Service
 public interface AdminMessageService {
     List<MessageDto> getMessages();
+    List<MessageDto> deleteMessage(Integer id);
 }

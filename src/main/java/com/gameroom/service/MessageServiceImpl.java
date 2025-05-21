@@ -6,6 +6,10 @@ import com.gameroom.util.ModelConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+
 @Service
 public class MessageServiceImpl implements MessageService {
     private final MessagesRepository messagesRepository;
@@ -19,6 +23,8 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void sendMessage(MessageDto messageDto) {
+        String formattedDateTime = LocalDate.now() + " | " + LocalTime.now().truncatedTo(ChronoUnit.SECONDS);
+        messageDto.setDate(formattedDateTime);
         messagesRepository.save(modelConverter.convert(messageDto));
     }
 }

@@ -23,4 +23,10 @@ public class AdminMessageServiceImpl implements AdminMessageService {
     public List<MessageDto> getMessages() {
         return modelConverter.convertMessagesToDtoList(messagesRepository.findAll());
     }
+
+    @Override
+    public List<MessageDto> deleteMessage(Integer id) {
+        messagesRepository.deleteById(id);
+        return modelConverter.convertMessagesToDtoList(messagesRepository.findAll());
+    }
 }
