@@ -39,6 +39,11 @@ public class AdminConsoleServiceImpl implements AdminConsoleService {
             console.setName(edited.getName());
             console.setDescription(edited.getDescription());
             console.setState(edited.getState());
+
+            String featuresString = String.join(", ", edited.getFeatures());
+            console.setFeatures(featuresString);
+
+            console.setPrice(edited.getPrice());
             console.setUserId(edited.getUserId());
 
             consoleRepository.save(console);
@@ -46,6 +51,7 @@ public class AdminConsoleServiceImpl implements AdminConsoleService {
 
         return modelConverter.convertConsolesToDtoList(consoleRepository.findAll());
     }
+
 
     @Override
     public List<ConsoleDto> deleteConsole(Integer id) {
